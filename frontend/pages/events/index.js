@@ -24,7 +24,7 @@ export default function EventsPage({ events }) {
 
 // getStaticProps - fetch at build time
 export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/events?[populate]=*&_sort=date:ASC`)
+  const res = await fetch(`${API_URL}/api/events?populate=*&_sort=date:ASC`)
   const { data } = await res.json()
 
   return {

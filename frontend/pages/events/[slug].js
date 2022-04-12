@@ -26,24 +26,33 @@ export default function EventPage({ evt }) {
         </div>
 
         <span>
-          {evt.date} at {evt.time}
+          {evt.attributes.date} at {evt.attributes.time}
         </span>
         <h1>{evt.name}</h1>
 
-        {evt.image && (
+        {evt.attributes.image && (
           <div className={styles.image}>
-            <Image src={`${evt.image}`} width={960} height={600} />
+            <Image
+              src={
+                evt.attributes.image
+                  ? evt.attributes.image.data.attributes.formats.large.url
+                  : '/images/event-default.png'
+              }
+              width={960}
+              height={600}
+              alt={evt.attributes.name}
+            />
           </div>
         )}
 
         <h3>Performers:</h3>
-        <p>{evt.performers}</p>
+        <p>{evt.attributes.performers}</p>
 
         <h3>Description</h3>
-        <p>{evt.description}</p>
+        <p>{evt.attributes.description}</p>
 
-        <h3>Venue: {evt.venue}</h3>
-        <p>{evt.address}</p>
+        <h3>Venue: {evt.attributes.venue}</h3>
+        <p>{evt.attributes.address}</p>
 
         <Link href="/events">
           <a className={styles.back}>{`< Go back`}</a>
@@ -57,9 +66,9 @@ export default function EventPage({ evt }) {
 export async function getStaticPaths() {
   // get all events
   const res = await fetch(`${API_URL}/api/events`)
-  const events = await res.json()
+  const { data } = await res.json()
 
-  const paths = events.map((evt) => ({ params: { slug: evt.slug } }))
+  const paths = data.map((evt) => ({ params: { slug: evt.attributes.slug } }))
 
   return {
     paths,
@@ -70,12 +79,14 @@ export async function getStaticPaths() {
 // get events at build time must required getStaticPaths
 export async function getStaticProps({ params: { slug } }) {
   // console.log(slug)
-  const res = await fetch(`${API_URL}/api/events/${slug}`)
-  const events = await res.json()
+  const res = await fetch(
+    `${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=*`
+  )
+  const { data } = await res.json()
 
   return {
     props: {
-      evt: events[0],
+      evt: data[0],
     },
     revalidate: 1,
   }
