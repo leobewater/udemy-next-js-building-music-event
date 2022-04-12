@@ -24,12 +24,12 @@ export default function EventsPage({ events }) {
 
 // getStaticProps - fetch at build time
 export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/events`)
-  const events = await res.json()
+  const res = await fetch(`${API_URL}/api/events?[populate]=*&_sort=date:ASC`)
+  const { data } = await res.json()
 
   return {
     props: {
-      events: events.slice(0, 3),
+      events: data.slice(0, 3),
     },
     // re-validate on every seconds
     revalidate: 1,

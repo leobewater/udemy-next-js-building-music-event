@@ -18,15 +18,17 @@ export default function HomePage({ events }) {
 
 // getStaticProps - fetch at build time
 export async function getStaticProps() {
-  const res = await fetch(`${API_URL}/api/events`)
-  const events = await res.json()
+  const res = await fetch(
+    `${API_URL}/api/events?[populate]=*&_sort=date:ASC&_limit=3`
+  )
+  const { data } = await res.json()
 
   // log on server side
   // console.log(events)
 
   return {
     props: {
-      events,
+      events: data,
     },
     // re-validate on every seconds
     revalidate: 1,
