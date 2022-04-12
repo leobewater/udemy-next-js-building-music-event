@@ -1,12 +1,7 @@
-import React from 'react';
-import {Link} from 'next/Link';
+import Layout from '../../components/Layout'
 
 function EventsPage() {
-    return (
-        <div>My Events
-            <Link href="/about">About</Link>
-        </div>
-    );
+  return <Layout title="My Events">My Events</Layout>
 }
 
-export default index;
+export default EventsPage

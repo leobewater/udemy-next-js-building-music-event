@@ -1,7 +1,7 @@
-export default function EventPage() {
-  return (
-    <div>
-      <h1>My Event</h1>
-    </div>
-  )
+import Layout from '../../components/Layout'
+
+function EventPage() {
+  return <Layout title="Event Page">Event Page</Layout>
 }
+
+export default EventPage
