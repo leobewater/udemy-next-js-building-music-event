@@ -1,4 +1,4 @@
-import Layout from '../../components/Layout'
+import Layout from '@/components/Layout'
 
 function EventPage() {
   return <Layout title="Event Page">Event Page</Layout>
