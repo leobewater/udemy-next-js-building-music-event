@@ -10,6 +10,7 @@ import Layout from '@/components/Layout'
 import Modal from '@/components/Modal'
 import { API_URL } from '@/config/index'
 import styles from '@/styles/Form.module.css'
+import ImageUpload from '@/components/ImageUpload'
 
 function EditEventPage({ evt }) {
   const data = evt.attributes
@@ -62,6 +63,14 @@ function EditEventPage({ evt }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setValues({ ...values, [name]: value })
+  }
+
+  const imageUploaded = async (url) => {
+    // update preview
+    setImagePreview(url)
+
+    // close modal
+    setShowModal(false)
   }
 
   return (
@@ -164,7 +173,7 @@ function EditEventPage({ evt }) {
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        IMAGE UPLOAD
+        <ImageUpload evtId={evt.id} imageUploaded={imageUploaded} />
       </Modal>
     </Layout>
   )
