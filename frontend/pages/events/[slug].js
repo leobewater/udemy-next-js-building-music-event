@@ -35,7 +35,7 @@ export default function EventPage({ evt }) {
           <div className={styles.image}>
             <Image
               src={
-                evt.attributes.image
+                evt.attributes.image.data
                   ? evt.attributes.image.data.attributes.formats.large.url
                   : '/images/event-default.png'
               }

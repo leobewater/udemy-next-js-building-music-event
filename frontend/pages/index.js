@@ -24,7 +24,7 @@ export async function getStaticProps() {
   const { data } = await res.json()
 
   // log on server side
-  // console.log(events)
+  // console.log(data)
 
   return {
     props: {
