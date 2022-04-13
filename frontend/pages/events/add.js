@@ -33,7 +33,7 @@ function AddEventPage() {
     }
 
     const data = { data: values }
-    
+
     const res = await fetch(`${API_URL}/api/events`, {
       method: 'POST',
       // mode: 'cors',
@@ -43,12 +43,11 @@ function AddEventPage() {
       body: JSON.stringify(data),
     })
 
-    console.log(res)
     if (!res.ok) {
       toast.error('Something Went Wrong')
     } else {
       const evt = await res.json()
-      router.push(`/events/${evt.slug}`)
+      router.push(`/events/${evt.data.attributes.slug}`)
     }
   }
 

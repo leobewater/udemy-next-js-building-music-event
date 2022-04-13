@@ -63,6 +63,7 @@ export default function EventPage({ evt }) {
   )
 }
 
+/*
 // generate all events slugs and paths for getStaticProps
 export async function getStaticPaths() {
   // get all events
@@ -92,15 +93,19 @@ export async function getStaticProps({ params: { slug } }) {
     revalidate: 1,
   }
 }
+*/
 
-// export async function getServerSideProps({ query: { slug } }) {
-//   // console.log(slug)
-//   const res = await fetch(`${API_URL}/api/events/${slug}`)
-//   const events = await res.json()
-
-//   return {
-//     props: {
-//       evt: events[0],
-//     },
-//   }
-// }
+export async function getServerSideProps({ query: { slug } }) {
+  // console.log(slug)
+  const res = await fetch(
+    `${API_URL}/api/events?filters[slug][$eq]=${slug}&populate=*`
+  )
+  const events = await res.json()
+  // console.log(events)
+  
+  return {
+    props: {
+      evt: events.data[0],
+    },
+  }
+}
