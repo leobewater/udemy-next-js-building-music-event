@@ -1,3 +1,5 @@
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -18,19 +20,36 @@ function AddEventPage() {
 
   const router = useRouter()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     // required validation
     const hasEmptyFields = Object.values(values).some(
       (element) => element === ''
     )
-    
+
     if (hasEmptyFields) {
-      console.error('Please fill in all fields')
-      return
+      toast.error('Please fill in all fields')
     }
 
+    const data = { data: values }
+    
+    const res = await fetch(`${API_URL}/api/events`, {
+      method: 'POST',
+      // mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+
+    console.log(res)
+    if (!res.ok) {
+      toast.error('Something Went Wrong')
+    } else {
+      const evt = await res.json()
+      router.push(`/events/${evt.slug}`)
+    }
   }
 
   const handleInputChange = (e) => {
@@ -42,6 +61,7 @@ function AddEventPage() {
     <Layout title="Add New Event">
       <Link href="/events">Go Back</Link>
       <h1>Add Event</h1>
+      <ToastContainer />
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.grid}>
@@ -56,12 +76,12 @@ function AddEventPage() {
             />
           </div>
           <div>
-            <label htmlFor="perfomers">Performers</label>
+            <label htmlFor="performers">Performers</label>
             <input
               type="text"
-              id="perfomers"
-              name="perfomers"
-              value={values.perfomers}
+              id="performers"
+              name="performers"
+              value={values.performers}
               onChange={handleInputChange}
             />
           </div>
@@ -108,7 +128,7 @@ function AddEventPage() {
         </div>
 
         <div>
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">Event Description</label>
           <textarea
             type="text"
             id="description"
