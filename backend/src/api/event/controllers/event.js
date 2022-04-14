@@ -38,7 +38,7 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
   async create(ctx) {
     let entity
     ctx.request.body.data.user = ctx.state.user
-    entity = await super.create(ctx)
+    entity = await strapi.service('api::event.event').create(ctx.request.body)
     return entity
   },
 
@@ -54,11 +54,11 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
     }
     const events = await this.find({ query: query })
     // console.log(events)
-    
+
     if (!events.data || !events.data.length) {
       return ctx.unauthorized(`You can't update this entry`)
     }
-    
+
     entity = await super.update(ctx)
     return entity
   },
@@ -77,7 +77,7 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
     if (!events.data || !events.data.length) {
       return ctx.unauthorized(`You can't delete this entry`)
     }
-    
+
     const response = await super.delete(ctx)
     return response
   },
