@@ -181,12 +181,15 @@ function EditEventPage({ evt }) {
 
 export default EditEventPage
 
-export async function getServerSideProps({ query: { id } }) {
+export async function getServerSideProps({ params: { id }, req }) {
   const res = await fetch(
     `${API_URL}/api/events?filters[id][$eq]=${id}&populate=*`
   )
   const evt = await res.json()
   //   console.log(evt)
+
+  // get the user cookie's token for the server side
+  console.log(req.headers.cookie)
 
   return {
     props: {
