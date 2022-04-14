@@ -1,3 +1,4 @@
+import { parseCookie } from '@/helpers/index'
 import moment from 'moment'
 import { FaImage } from 'react-icons/fa'
 import { ToastContainer, toast } from 'react-toastify'
@@ -12,7 +13,7 @@ import { API_URL } from '@/config/index'
 import styles from '@/styles/Form.module.css'
 import ImageUpload from '@/components/ImageUpload'
 
-function EditEventPage({ evt }) {
+function EditEventPage({ evt, token }) {
   const data = evt.attributes
   const [values, setValues] = useState({
     name: data.name,
@@ -48,12 +49,19 @@ function EditEventPage({ evt }) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     })
 
     if (!res.ok) {
+      if (res.status === 403 || res.status === 401) {
+        toast.error('No jwt token included')
+        return
+      }
+
       toast.error('Something Went Wrong')
+      return
     } else {
       const evt = await res.json()
       router.push(`/events/${evt.data.attributes.slug}`)
@@ -188,12 +196,13 @@ export async function getServerSideProps({ params: { id }, req }) {
   const evt = await res.json()
   //   console.log(evt)
 
-  // get the user cookie's token for the server side
-  console.log(req.headers.cookie)
+  // get the user cookie's token from the server side
+  const { token } = parseCookie(req)
 
   return {
     props: {
       evt: evt.data[0],
+      token,
     },
   }
 }
