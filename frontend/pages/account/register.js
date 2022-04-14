@@ -67,7 +67,7 @@ export default function RegisterPage() {
             />
           </div>
           <div>
-            <label htmlFor="passwordConfirm">Confirm</label>
+            <label htmlFor="passwordConfirm">Confirm Password</label>
             <input
               type="password"
               id="passwordConfirm"

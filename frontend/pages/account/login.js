@@ -26,7 +26,7 @@ export default function LoginPage() {
     <Layout title="User Login">
       <div className={styles.auth}>
         <h1>
-          <FaUser /> Login
+          <FaUser /> Log In
         </h1>
         <ToastContainer />
         <form onSubmit={handleSubmit}>
