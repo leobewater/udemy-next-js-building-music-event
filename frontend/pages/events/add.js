@@ -1,3 +1,4 @@
+import { parseCookie } from '@/helpers/index'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useState } from 'react'
@@ -7,7 +8,7 @@ import Layout from '@/components/Layout'
 import { API_URL } from '@/config/index'
 import styles from '@/styles/Form.module.css'
 
-function AddEventPage() {
+function AddEventPage({ token }) {
   const [values, setValues] = useState({
     name: '',
     performers: '',
@@ -39,15 +40,23 @@ function AddEventPage() {
       // mode: 'cors',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     })
 
     if (!res.ok) {
+      if (res.status === 403 || res.status === 401) {
+        toast.error('No jwt token included')
+        return
+      }
+
       toast.error('Something Went Wrong')
+      return
     } else {
       const evt = await res.json()
-      router.push(`/events/${evt.data.attributes.slug}`)
+      console.log(evt);
+      router.push(`/events/${evt.slug}`)
     }
   }
 
@@ -144,3 +153,12 @@ function AddEventPage() {
 }
 
 export default AddEventPage
+
+export async function getServerSideProps({ req }) {
+  const { token } = parseCookie(req)
+  return {
+    props: {
+      token,
+    },
+  }
+}
