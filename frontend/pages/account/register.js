@@ -15,11 +15,15 @@ export default function RegisterPage() {
 
   const { register, error } = useContext(AuthContext)
 
+  useEffect(() => {
+    toast.error(error)
+  }, [error])
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (password !== passwordConfirm) {
-        toast.error('Passwords do not match!')
-        return
+      toast.error('Passwords do not match!')
+      return
     }
     register({ username, email, password })
   }
@@ -72,7 +76,7 @@ export default function RegisterPage() {
               onChange={(e) => setPasswordConfirm(e.target.value)}
             />
           </div>
-          <input type="submit" value="Login" className="btn" />
+          <input type="submit" value="Register" className="btn" />
         </form>
 
         <p>
