@@ -20,7 +20,7 @@ export default function EventPage({ evt }) {
       })
 
       const data = await res.json()
-      console.log(data)
+      // console.log(data)
 
       if (!res.ok) {
         toast.error(data.message)
@@ -50,7 +50,7 @@ export default function EventPage({ evt }) {
           {evt.attributes.time}
         </span>
 
-        <h1>{evt.name}</h1>
+        <h1>{evt.attributes.name}</h1>
         <ToastContainer />
 
         {evt.attributes.image && (
